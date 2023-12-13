@@ -1,18 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
+import { getLocales } from './actions';
 import { InputsForm } from './InputsForm';
 
-async function getLocales() {
-  const response = await fetch(process.env.REACT_APP_API_URL + '/api/locales');
-  const data = await response.json();
-  return data.locales;
-}
-
-export const LocalesPage = (props) => {
+export const LocalesPage = () => {
   const availableLocales = ['en', 'pl', 'ru', 'uk'];
   const [locale, setLocale] = useState(() => availableLocales[0]);
   const [locales, setLocales] = useState([]);
   const [newLocales, setNewLocales] = useState([]);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const getFilteredLocalesBySelectedLocale = () => {
     return locales.filter((localeFromLocales) => {
@@ -29,10 +25,9 @@ export const LocalesPage = (props) => {
 
   useEffect(() => {
     getLocales().then((locales) => {
-      console.log(locales);
       setLocales(locales);
     });
-  }, []);
+  }, [forceUpdate]);
 
   return (
     <div>
@@ -51,14 +46,14 @@ export const LocalesPage = (props) => {
       <div className="_mt-8">
         {getFilteredLocalesBySelectedLocale().map((loc) => (
           <Fragment key={loc.key + loc.value}>
-            <InputsForm locale={loc} />
+            <InputsForm locale={loc} setUpdate={setForceUpdate} />
           </Fragment>
         ))}
       </div>
       {newLocales.length ? <hr /> : null}
       {newLocales.map((loc) => (
         <Fragment key={loc.key + loc.value}>
-          <InputsForm locale={loc} newLocale={true} />
+          <InputsForm locale={loc} newLocale={true} setUpdate={setForceUpdate} />
         </Fragment>
       ))}
       <div className="btn btn-success" onClick={addNewLocale}>

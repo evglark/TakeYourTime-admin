@@ -1,10 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
+import { addLocale, removeLocale } from '../actions';
+
 export const InputsForm = (props) => {
-  const { locale, newLocale } = props;
+  const { locale, newLocale, setUpdate } = props;
   const [key, setKey] = useState('');
   const [value, setValue] = useState('');
-  const [editMode, setEditMode] = useState(false);
+
+  const createLocale = () => {
+    addLocale({ key, value, locale: locale.locale }).then((data) => {
+      setKey('');
+      setValue('');
+      setUpdate();
+    });
+  };
+
+  const deleteLocale = () => {
+    removeLocale({ key, value, locale: locale.locale }).then((data) => {
+      setKey('');
+      setValue('');
+      setUpdate();
+    });
+  }
 
   useEffect(() => {
     if (locale) {
@@ -12,10 +29,6 @@ export const InputsForm = (props) => {
       setValue(locale.value);
     }
   }, [locale]);
-
-  useEffect(() => {
-    setEditMode(key !== locale.key || value !== locale.value);
-  }, [key, value]);
 
   return (
     <div className="input-group mb-3">
@@ -36,15 +49,11 @@ export const InputsForm = (props) => {
         placeholder="Value"
       />
       {newLocale ? (
-        <span className="input-group-text">
+        <span className="input-group-text btn btn-success" onClick={createLocale}>
           Add
         </span>
-      ) : editMode ? (
-        <span className="input-group-text">
-          Save
-        </span>
       ) : (
-        <span className="input-group-text">
+        <span className="input-group-text btn btn-danger" onClick={deleteLocale}>
           Delete
         </span>
       )}
