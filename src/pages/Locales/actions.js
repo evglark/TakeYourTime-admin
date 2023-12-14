@@ -15,7 +15,18 @@ export async function addLocale(localeObj) {
   return data.locale;
 }
 
-export async function removeLocale(localeObj) {
+export async function updateLocale(localeObj) {
+  const response = await fetch(process.env.REACT_APP_API_URL + '/api/locales', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(localeObj),
+  });
+
+  const data = await response.json();
+  return data.locale;
+}
+
+export async function deleteLocale(localeObj) {
   const response = await fetch(process.env.REACT_APP_API_URL + '/api/locales', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
