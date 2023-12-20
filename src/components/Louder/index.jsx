@@ -2,8 +2,8 @@ import React from 'react';
 
 import './style.css';
 
-export const Louder = () => {
-  return (
+export const Louder = ({ visible = false }) => {
+  return visible ? (
     <div className="_fixed _top-0 _left-0 _w-full _h-full _flex _items-center _justify-center _bg-gray-800 _bg-opacity-50 _z-50">
       <div className="_loader _flex _items-center _justify-center">
       <svg xmlns="http://www.w3.org/2000/svg" height="36" width="36" viewBox="0 0 512 512">
@@ -11,5 +11,5 @@ export const Louder = () => {
       </svg>
       </div>
     </div>
-  );
+  ) : null;
 };

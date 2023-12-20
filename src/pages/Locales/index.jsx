@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
+import { Louder } from '../../components/Louder';
+
 import { getLocales } from './actions';
 import { InputsForm } from './InputsForm';
-import { Louder } from './Louder';
 
 export const LocalesPage = () => {
   const availableLocales = ['en', 'pl', 'ru', 'uk'];
@@ -28,7 +29,6 @@ export const LocalesPage = () => {
   };
 
   useEffect(() => {
-    console.log('update');
     setLoading(true);
     setNewLocales((nL) => nL.filter((loc) => loc.key || loc.value));
     getLocales().then((locales) => {
@@ -39,7 +39,7 @@ export const LocalesPage = () => {
 
   return (
     <div className="locales-page">
-      {loading ? <Louder /> : null}
+      <Louder visible={loading} />
       <div className='_flex _gap-4'>
         {availableLocales.map((localeFromAvailable) => {
           const bgColor = localeFromAvailable === locale ? 'btn-primary' : 'btn-secondary';
