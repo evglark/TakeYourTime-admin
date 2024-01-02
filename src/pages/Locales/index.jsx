@@ -8,6 +8,7 @@ import { InputsForm } from './InputsForm';
 export const LocalesPage = () => {
   const availableLocales = ['en', 'pl', 'ru', 'uk'];
   const [locale, setLocale] = useState(() => availableLocales[0]);
+  const [filter, setFilter] = useState('');
   const [locales, setLocales] = useState([]);
   const [newLocales, setNewLocales] = useState([]);
   const [forceUpdate, setForceUpdate] = useState(false);
@@ -17,7 +18,11 @@ export const LocalesPage = () => {
 
   const getFilteredLocalesBySelectedLocale = () => {
     return locales.filter((localeFromLocales) => {
-      return localeFromLocales.locale === locale;
+      const filterByLocale = localeFromLocales.locale === locale;
+      const filterByKey = localeFromLocales.key.toLowerCase().includes(filter.toLowerCase())
+      const filterByValue = String(localeFromLocales.value).toLowerCase().includes(filter.toLowerCase());
+
+      return filterByLocale && (filterByKey || filterByValue);
     });
   }
 
@@ -51,17 +56,24 @@ export const LocalesPage = () => {
             </Fragment>
           )
         })}
+        <div type="button" className="btn btn-secondary" onClick={() => setFilter('')}>
+          Reset filter
+        </div>
       </div>
       <div className="_mt-8">
-        {getFilteredLocalesBySelectedLocale().map((loc) => (
-          <Fragment key={loc.key + loc.value}>
+        <input
+          type="text" className="form-control _mb-8" placeholder="Filter by key or value"
+          value={filter} onChange={(e) => setFilter(e.target.value)}
+        />
+        {getFilteredLocalesBySelectedLocale().map((loc, i) => (
+          <Fragment key={loc.key + loc.value + i}>
             <InputsForm locale={loc} setLoading={setLoading} setUpdate={toggleForceUpdate} />
           </Fragment>
         ))}
       </div>
       {newLocales.length ? <hr /> : null}
-      {newLocales.map((loc) => (
-        <Fragment key={loc.key + loc.value}>
+      {newLocales.map((loc, i) => (
+        <Fragment key={loc.key + loc.value + 'new' + i}>
           <InputsForm locale={loc} setLoading={setLoading} setUpdate={toggleForceUpdate} newLocale />
         </Fragment>
       ))}

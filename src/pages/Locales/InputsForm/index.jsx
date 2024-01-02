@@ -24,6 +24,7 @@ export const InputsForm = (props) => {
 
   const onUpdateLocale = () => {
     setLoading(true);
+    console.log({ key, value, locale: locale.locale });
     updateLocale({ key, value, locale: locale.locale }).then((data) => {
       setKey(data.key);
       setValue(data.value);
